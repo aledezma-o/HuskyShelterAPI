@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion : '2010-09-09'
 
-Description: my template
+Description: S3 CloudFormation Lab
 Resources:
     MyBucket:
         Type: AWS::S3::Bucket

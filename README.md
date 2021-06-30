@@ -13,3 +13,15 @@ or visit https://docs.aws.amazon.com/console/cloud9/ for our documentation.
 
 Happy coding!
 # HuskyShelterAPI
+
+
+./deployment.sh -b //buildear
+./deployment.sh -p //para actualizar el package
+./deployment.sh -d //hacerle deploy y hacer cambios
+
+Para actualizar el codigo seguir el orden:
+    -b => -p => -d
+    
+Para actualizar solamente el template:
+    -p => -d
+    
