@@ -1,12 +1,39 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform:
 - AWS::Serverless-2016-10-31
-Description: Lambda CloudFormation Lab
+Description: Adoption CloudFormation Project
 Resources:
-  MyLambda:
+  SolicitAdoption:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: husky-shelter-adoption-function
-      Handler: lambda.handler
+      FunctionName: solicitAdoption
+      Handler: adopt.solicitAdoption
       Runtime: python3.6
-      CodeUri: s3://husky-shelter-bucket/7b5f40e4a6a3248b6d1d1f3afccf64c1
+      CodeUri: s3://husky-shelter-bucket/4a4007da88110ee5a9bcf04155a61d3e
+  MyAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: husky-api
+      StageName: prod
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: s3://husky-shelter-bucket/9c03686e509405d2765683ff37591a65
+  MyTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: animal-adoption-table
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      KeySchema:
+      - AttributeName: pk
+        KeyType: HASH
+      - AttributeName: sk
+        KeyType: RANGE
+      AttributeDefinitions:
+      - AttributeName: pk
+        AttributeType: S
+      - AttributeName: sk
+        AttributeType: S
