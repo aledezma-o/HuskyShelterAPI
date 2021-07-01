@@ -290,7 +290,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref HuskySheltersAPI
-            Path: "/pets/approveAdoption/{}"
+            Path: "/pets/approveAdoption/{adoptID}"
             Method: PUT
       
   SolicitAdoption:
@@ -300,6 +300,26 @@ Resources:
       Handler: adopt.solicitAdoption
       Runtime: python3.6
       CodeUri: package/
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref HuskySheltersTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref HuskySheltersTable
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt HuskySheltersTopic.TopicName
+        - SNSCrudPolicy:
+            TopicName: !GetAtt HuskySheltersTopic.TopicName
+      Environment:
+        Variables:
+          HUSKY_SHELTERS_TABLE: !Ref HuskySheltersTable
+          TOPIC_ARN: !Ref HuskySheltersTopic #
+      Events:
+        ApproveAdoptionSolicit:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HuskySheltersAPI
+            Path: "/pets/solicitAdoption/{adoptID}"
+            Method: PUT
   #    Policies:
   #     - DynamoDBReadPolicy:
   #        TableName: !Ref MyTable
